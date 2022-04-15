@@ -3,10 +3,18 @@
 /// Author: Stevie Alvarez
 
 use std::env;
+mod cli;
 
 fn main() {
-  // handle command line args
+  // get command line args
   let args: Vec<String> = env::args().collect();
+  let l: usize = args.len();
 
   // loop on user input
+  if l == 0 {
+    cli::run();
+
+  } else {  // handle command line args
+
+  }
 }
