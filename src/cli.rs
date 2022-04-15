@@ -1,5 +1,5 @@
 /// Command line prompt
 
 pub fn run() {
-  print!("cli run called");
+  println!("cli run called");
 }
