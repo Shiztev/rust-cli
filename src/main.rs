@@ -3,6 +3,7 @@
 /// Author: Stevie Alvarez
 
 use std::env;
+
 mod cli;
 
 fn main() {
@@ -15,6 +16,8 @@ fn main() {
     cli::run();
 
   } else {  // handle command line args
-
+    if args[1] == "hello" {
+      println!("Hello World!");
+    }
   }
 }
