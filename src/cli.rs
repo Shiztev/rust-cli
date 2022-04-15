@@ -9,7 +9,7 @@ pub fn run() {
 /// if command exists, run and return true
 /// 
 /// if command does not exist, return false
-pub fn command_selector(c: String) -> bool {
+pub fn command_selector(c: &String) -> bool {
   if c == "help" {
     help();
 
@@ -26,8 +26,8 @@ pub fn command_selector(c: String) -> bool {
 
 /// Print CLI help
 fn help() {
-  println!("Usage: rust-cli [OPTIONS...]\n\n--help\n\tprint out program help information
-  \n\n--hello\n\tprint \"Hello World!\"");
+  println!("Usage: rust-cli [OPTIONS...]\n\nhelp\n\tprint out program help information
+  \n\nhello\n\tprint \"Hello World!\"");
 }
 
 /// Print "Hello World!"

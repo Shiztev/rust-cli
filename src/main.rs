@@ -16,15 +16,6 @@ fn main() {
     cli::run();
 
   } else {  // handle command line args
-    if args[1] == "--help" {
-      println!("Usage: rust-cli [OPTIONS...]\n\n--help\n\tprint out program help information
-      \n\n--hello\n\tprint \"Hello World!\"");
-
-    } else if args[1] == "--hello" {
-      println!("Hello World!");
-
-    } else {
-      println!("Usage: rust-cli [OPTIONS...]\nTry: 'rust-cli --help' for more information.");
-    }
+    cli::command_selector(&args[1]);
   }
 }
