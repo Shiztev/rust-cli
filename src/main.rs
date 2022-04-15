@@ -16,6 +16,6 @@ fn main() {
     cli::run();
 
   } else {  // handle command line args
-    cli::command_selector(&args[1]);
+    cli::command_selector(&args[1].trim());
   }
 }
