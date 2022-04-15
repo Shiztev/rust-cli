@@ -1,7 +1,22 @@
 /// Command line prompt
 
+use std::io::{stdin, stdout, Write};
+
 pub fn run() {
   println!("cli run called");
+  let r;
+  let mut buf = String::new();
+
+  print!("r| ");
+  stdout().flush().expect("Could not flush out command prompt");
+  r = stdin().read_line(&mut buf);
+
+  match r {
+    Ok(thing) => thing,
+    Err(error) => panic!("{:?}", error)
+  };
+
+  println!("you entered: {}", buf);
 }
 
 /// Run the specified command
