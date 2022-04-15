@@ -3,40 +3,31 @@
 use std::io::{stdin, stdout, Write};
 
 pub fn run() {
-  println!("cli run called");
-  let r;
-  let mut buf = String::new();
+  let mut buf: String = String::new();
 
+  // prompt user, handle output errors
   print!("r| ");
   stdout().flush().expect("Could not flush out command prompt");
-  r = stdin().read_line(&mut buf);
 
-  match r {
-    Ok(thing) => thing,
-    Err(error) => panic!("{:?}", error)
-  };
+  // get input, handle errors
+  stdin().read_line(&mut buf).expect("failed to read line");
+
+  // run respective command
+  command_selector(&buf);
+
+
 
   println!("you entered: {}", buf);
 }
 
 /// Run the specified command
-/// 
-/// if command exists, run and return true
-/// 
-/// if command does not exist, return false
-pub fn command_selector(c: &String) -> bool {
-  if c == "help" {
-    help();
+pub fn command_selector(c: &String) {
 
-  } else if c == "hello" {
-    hello_world();
-
-  } else {
-    println!("Usage: rust-cli [OPTIONS...]\nTry: 'rust-cli --help' for more information.");
-    return false;
+  match c.trim() {
+    "help" => help(),
+    "hello" => hello_world(),
+    _ => println!("Usage: rust-cli [OPTIONS...]\nTry: 'rust-cli --help' for more information.")
   }
-
-  true
 }
 
 /// Print CLI help
