@@ -23,7 +23,7 @@ pub fn run() {
 pub fn command_selector(c: &str) {
 
   match c {
-    "quit"  => exit(0),
+    "quit" | "exit" => exit(0),
     "help" => help(),
     "hello" => hello_world(),
     _ => println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", c)
