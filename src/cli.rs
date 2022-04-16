@@ -1,6 +1,6 @@
 /// Command line prompt
 
-use std::{io::{stdin, stdout, Write}, process::exit};
+use std::io::{stdin, stdout, Write};
 
 pub fn run() {
   let mut buf: String = String::new();
@@ -14,32 +14,41 @@ pub fn run() {
     stdin().read_line(&mut buf).expect("failed to read line");
 
     // run respective command
-    command_selector(buf.trim());
+    commands::command_selector(buf.trim().split(" ").collect());
     buf.clear();
   }
 }
 
-/// Run the specified command
-pub fn command_selector(c: &str) {
+pub mod commands {
+    use std::process::exit;
 
-  match c {
-    "quit" | "exit" => exit(0),
-    "help" => help(),
-    "hello" => hello_world(),
-    _ => println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", c)
+  /// Run the specified command
+  pub fn command_selector(c: Vec<&str>) {
+    
+    // if no command, exit
+    if c.len() == 0 {
+      return;
+    }
+
+    match c[0] {
+      "quit" | "exit" => exit(0),
+      "help" => help(),
+      "hello" => hello_world(),
+      _ => println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", c[0])
+    }
+
+    println!();
   }
 
-  println!();
-}
+  /// Print CLI help
+  fn help() {
+    println!("Usage: rust-cli [OPTIONS...]
+    \n\n\thelp\n\t\tprint out program help information
+    \n\n\thello\n\t\tprint \"Hello World!\"");
+  }
 
-/// Print CLI help
-fn help() {
-  println!("Usage: rust-cli [OPTIONS...]
-  \n\n\thelp\n\t\tprint out program help information
-  \n\n\thello\n\t\tprint \"Hello World!\"");
-}
-
-/// Print "Hello World!"
-fn hello_world() {
-  println!("Hello World!");
+  /// Print "Hello World!"
+  fn hello_world() {
+    println!("Hello World!");
+  }
 }
