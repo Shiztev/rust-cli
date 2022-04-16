@@ -23,18 +23,18 @@ pub mod commands {
     use std::process::exit;
 
   /// Run the specified command
-  pub fn command_selector(c: Vec<&str>) {
+  pub fn command_selector(args: Vec<&str>) {
     
     // if no command, exit
-    if c.len() == 0 {
+    if args.len() == 0 {
       return;
     }
 
-    match c[0] {
+    match args[0] {
       "quit" | "exit" => exit(0),
       "help" => help(),
       "hello" => hello_world(),
-      _ => println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", c[0])
+      _ => println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", args[0])
     }
 
     println!();
@@ -50,5 +50,10 @@ pub mod commands {
   /// Print "Hello World!"
   fn hello_world() {
     println!("Hello World!");
+  }
+
+  /// Write the provided text to the desired file.
+  fn write_to_file() {
+
   }
 }
