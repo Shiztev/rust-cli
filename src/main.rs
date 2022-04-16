@@ -4,6 +4,8 @@
 
 use std::env;
 
+use cli::commands::command_selector;
+
 mod cli;
 
 fn main() {
@@ -16,6 +18,6 @@ fn main() {
     cli::run();
 
   } else {  // handle command line args
-    cli::command_selector(&args[1].trim());
+    command_selector(args[1..].iter().map(AsRef::as_ref).collect());
   }
 }
