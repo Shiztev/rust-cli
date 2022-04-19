@@ -61,8 +61,6 @@ pub mod commands {
     // add args
     c.args(args);
 
-    // TODO Both of the below methods of calling shell functions crash on 
-    // commands that DNE. Find a way around this?
     let r = c.spawn();
     
     match r {
