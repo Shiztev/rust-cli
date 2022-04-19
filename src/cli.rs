@@ -63,10 +63,10 @@ pub mod commands {
 
     // TODO Both of the below methods of calling shell functions crash on 
     // commands that DNE. Find a way around this?
-    let mut r = c.spawn();
+    let r = c.spawn();
     
     match r {
-      Ok(mut r) => {r.wait();},
+      Ok(mut child) => {child.wait();},
       Err(er) => eprintln!("{}", er)
     }
   }
