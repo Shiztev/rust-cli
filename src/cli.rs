@@ -60,10 +60,22 @@ pub mod commands {
   /// This inherintly overwrites the standard 'write' command in most 
   /// modern clis. 
   fn write_to_file(args: Vec<&str>) {
+    // basecase
     if args.len() < 3 {
       println!("Usage: write <filename> <text>");
       return;
     }
+
+    // open file
+
+
+    if args.len() == 4 {
+          // write to file
+
+    // append to file
+    }
+
+    // write to file
   }
 
   /// Execute the command in bash
