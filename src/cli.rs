@@ -22,7 +22,7 @@ pub fn run() {
 }
 
 pub mod commands {
-  use std::{process::{exit, Command}, vec::IntoIter};
+  use std::{process::{exit, Command}, vec::IntoIter, fs::File, io::{self, Read, Write}};
 
   /// Run the specified command
   pub fn command_selector(args: Vec<&str>) {
@@ -67,15 +67,33 @@ pub mod commands {
     }
 
     // open file
+    let mut buf: String;
+    let mut r: Result<File, io::Error>;
+    let mut file: File;
 
+    if !args[2].contains(">") {
+      r = File::options().write(true).open(args[1]);
+      buf = args[2].to_string();
 
-    if args.len() == 4 {
-          // write to file
+    } else if args.len() == 4 {  // TODO Currently, split on whitespace -> only write one word
+      r = File::options().write(args[2] == ">").truncate(args[2] == ">").append(args[2] == ">>").open(args[3]);
+      buf = args[1].to_string();
 
-    // append to file
+    } else {
+      println!("Usage: write <filename> <text> OR write <text> [Mode: >, >>] <filename>");
+      return;
     }
 
     // write to file
+    match r {
+      Ok(o) => {file = o},
+      Err(er) => {eprintln!("{}", er); return;}
+    }
+
+    match file.write_all(buf.as_bytes()) {
+      Ok(o) => {},
+      Err(er) => {eprintln!("{}", er); return;}
+    }
   }
 
   /// Execute the command in bash
