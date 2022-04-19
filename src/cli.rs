@@ -5,6 +5,8 @@ use std::io::{stdin, stdout, Write};
 pub fn run() {
   let mut buf: String = String::new();
 
+  println!("\nWelcome to my rust cli. Note that piping is not supported.");
+
   loop {
     // prompt user, handle output errors
     print!("r| ");
@@ -14,13 +16,13 @@ pub fn run() {
     stdin().read_line(&mut buf).expect("failed to read line");
 
     // run respective command
-    commands::command_selector(buf.trim().split(" ").collect());
+    commands::command_selector(buf.trim().split_whitespace().collect());
     buf.clear();
   }
 }
 
 pub mod commands {
-    use std::process::exit;
+  use std::{process::{exit, Command}, vec::IntoIter};
 
   /// Run the specified command
   pub fn command_selector(args: Vec<&str>) {
@@ -34,7 +36,7 @@ pub mod commands {
       "quit" | "exit" => exit(0),
       "help" => help(),
       "hello" => hello_world(),
-      _ => println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", args[0])
+      _ => exec_bash_cmd(args.into_iter())//println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", args[0])
     }
 
     println!();
@@ -50,6 +52,23 @@ pub mod commands {
   /// Print "Hello World!"
   fn hello_world() {
     println!("Hello World!");
+  }
+
+  /// Execute the command in bash
+  fn exec_bash_cmd(mut args: IntoIter<&str>) {
+    let mut c: Command = Command::new(args.next().unwrap());
+
+    // add args
+    c.args(args);
+
+    // TODO Both of the below methods of calling shell functions crash on 
+    // commands that DNE. Find a way around this?
+    let mut r = c.spawn();
+    
+    match r {
+      Ok(mut r) => {r.wait();},
+      Err(er) => eprintln!("{}", er)
+    }
   }
 
   /// Write the provided text to the desired file.
