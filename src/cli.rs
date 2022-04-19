@@ -36,6 +36,7 @@ pub mod commands {
       "quit" | "exit" => exit(0),
       "help" => help(),
       "hello" => hello_world(),
+      "write" => write_to_file(args),
       _ => exec_bash_cmd(args.into_iter())//println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", args[0])
     }
 
@@ -54,6 +55,17 @@ pub mod commands {
     println!("Hello World!");
   }
 
+  /// Write the provided text to the desired file.
+  /// 
+  /// This inherintly overwrites the standard 'write' command in most 
+  /// modern clis. 
+  fn write_to_file(args: Vec<&str>) {
+    if args.len() < 3 {
+      println!("Usage: write <filename> <text>");
+      return;
+    }
+  }
+
   /// Execute the command in bash
   fn exec_bash_cmd(mut args: IntoIter<&str>) {
     let mut c: Command = Command::new(args.next().unwrap());
@@ -67,10 +79,5 @@ pub mod commands {
       Ok(mut child) => {child.wait();},
       Err(er) => eprintln!("{}", er)
     }
-  }
-
-  /// Write the provided text to the desired file.
-  fn write_to_file() {
-
   }
 }
