@@ -68,17 +68,15 @@ pub mod commands {
 
     // open file
     let buf: String;
-    let r;//: Result<File, io::Error>;
+    let r: Result<File, io::Error>;
     let mut file: File;
 
     if !args[2].contains(">") {
       r = OpenOptions::new().write(true).create(true).open(args[1]);
-      //r = File::options().write(true).open(args[1]);
       buf = args[2].to_string();
 
     } else if args.len() == 4 {  // TODO Currently, split on whitespace -> only write one word
       r = OpenOptions::new().write(args[2] == ">").append(args[2] == ">>").create(true).open(args[3]);
-      //r = File::options().write(args[2] == ">").truncate(args[2] == ">").append(args[2] == ">>").open(args[3]);
       buf = args[1].to_string();
 
     } else {
