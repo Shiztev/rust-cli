@@ -11,13 +11,12 @@ mod cli;
 fn main() {
   // get command line args
   let args: Vec<String> = env::args().collect();
-  let l: usize = args.len();
 
   // loop on user input
-  if l == 1 {
+  if args.len() == 1 {
     cli::run();
 
   } else {  // handle command line args
-    command_selector(args[1..].iter().map(AsRef::as_ref).collect());
+    command_selector(args[1].as_str(), args[2..].iter().map(AsRef::as_ref).collect::<Vec<&str>>().join(" ").as_str());
   }
 }
