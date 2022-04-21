@@ -15,29 +15,33 @@ pub fn run() {
     // get input, handle errors
     stdin().read_line(&mut buf).expect("failed to read line");
 
+    // get command and args separatly
+    let mut split = buf.splitn(2, " ");
+
     // run respective command
-    commands::command_selector(buf.trim().split_whitespace().collect());
+    commands::command_selector(split.next().unwrap(), split.next().unwrap());
     buf.clear();
   }
 }
 
+/// Collection of commands, which can be called with a public facing command selection function.
 pub mod commands {
-  use std::{process::{exit, Command}, vec::IntoIter, fs::{File, OpenOptions}, io::{self, Read, Write}};
+  use std::{process::{exit, Command}, fs::{File, OpenOptions}, io::{self, Write}};
 
   /// Run the specified command
-  pub fn command_selector(args: Vec<&str>) {
+  pub fn command_selector(cmd: &str, args: &str) {
     
     // if no command, exit
     if args.len() == 0 {
       return;
     }
 
-    match args[0] {
+    match cmd {
       "quit" | "exit" => exit(0),
       "help" => help(),
       "hello" => hello_world(),
       "write" => write_to_file(args),
-      _ => exec_bash_cmd(args.into_iter())//println!("rust-cli: no command '{}'\nTry: 'rust-cli --help' for more information.", args[0])
+      _ => exec_bash_cmd(cmd, args)
     }
 
     println!();
@@ -58,11 +62,14 @@ pub mod commands {
   /// Write the provided text to the desired file.
   /// 
   /// This inherintly overwrites the standard 'write' command in most 
-  /// modern clis. 
-  fn write_to_file(args: Vec<&str>) {
+  /// modern cli's. 
+  fn write_to_file(args: &str) {
+    let a: Vec<&str> = args.splitn(3, "\"").collect::<Vec<&str>>();
+
+    
     // basecase
     if args.len() < 3 {
-      println!("Usage: write <filename> <text>");
+      println!("Usage: write <filename> <\"text\">OR write <\"text\"> [Mode: >, >>] <filename>");
       return;
     }
 
@@ -71,17 +78,14 @@ pub mod commands {
     let r: Result<File, io::Error>;
     let mut file: File;
 
-    if !args[2].contains(">") {
-      r = OpenOptions::new().write(true).create(true).open(args[1]);
-      buf = args[2].to_string();
-
-    } else if args.len() == 4 {  // TODO Currently, split on whitespace -> only write one word
-      r = OpenOptions::new().write(args[2] == ">").append(args[2] == ">>").create(true).open(args[3]);
-      buf = args[1].to_string();
+    if a[2].contains(">") {
+      let tmp = a[2].trim().splitn(2, " ").collect::<Vec<&str>>();
+      r = OpenOptions::new().write(tmp[0] == ">").append(tmp[0] == ">>").create(true).open(tmp[1]);
+      buf = a[1].to_string();
 
     } else {
-      println!("Usage: write <filename> <text> OR write <text> [Mode: >, >>] <filename>");
-      return;
+      r = OpenOptions::new().write(true).create(true).open(a[0].trim());
+      buf = a[1].to_string();
     }
 
     // write to file
@@ -96,12 +100,13 @@ pub mod commands {
     }
   }
 
-  /// Execute the command in bash
-  fn exec_bash_cmd(mut args: IntoIter<&str>) {
-    let mut c: Command = Command::new(args.next().unwrap());
-
+  /// Execute the command in the systems default cli
+  fn exec_bash_cmd(cmd: &str, args: &str) {
+    let mut c: Command = Command::new(cmd);
+    let a = args.split_whitespace();
+    
     // add args
-    c.args(args);
+    c.args(a);
 
     let r = c.spawn();
     
