@@ -8,6 +8,8 @@ pub fn run() {
   println!("\nWelcome to my rust cli. Note that piping is not supported.");
 
   loop {
+    buf.clear();
+
     // prompt user, handle output errors
     print!("r| ");
     stdout().flush().expect("Could not flush out command prompt");
@@ -19,8 +21,20 @@ pub fn run() {
     let mut split = buf.splitn(2, " ");
 
     // run respective command
-    commands::command_selector(split.next().unwrap(), split.next().unwrap());
-    buf.clear();
+    let cmd;
+    let mut args = " ";
+
+    match split.next() {
+      Some(inner) => {cmd = inner},
+      None => continue
+    }
+
+    match split.next() {
+      Some(inner) => {args = inner},
+      None => {}
+    }
+
+    commands::command_selector(cmd, args);
   }
 }
 
@@ -31,12 +45,7 @@ pub mod commands {
   /// Run the specified command
   pub fn command_selector(cmd: &str, args: &str) {
     
-    // if no command, exit
-    if args.len() == 0 {
-      return;
-    }
-
-    match cmd {
+    match cmd.trim() {
       "quit" | "exit" => exit(0),
       "help" => help(),
       "hello" => hello_world(),
