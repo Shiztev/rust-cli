@@ -58,9 +58,12 @@ pub mod commands {
 
   /// Print CLI help
   fn help() {
-    println!("Usage: rust-cli [OPTIONS...]
+    println!("
+    Usage: rust-cli [OPTIONS...]
     \n\n\thelp\n\t\tprint out program help information
-    \n\n\thello\n\t\tprint \"Hello World!\"");
+    \n\n\thello\n\t\tprint \"Hello World!\"
+    \n\n\twrite <filename> <\"text\">\n\tOR\n\twrite <\"text\"> [Mode: >, >>] <filename>
+    ");
   }
 
   /// Print "Hello World!"
@@ -78,7 +81,7 @@ pub mod commands {
     
     // basecase
     if args.len() < 3 {
-      println!("Usage: write <filename> <\"text\">OR write <\"text\"> [Mode: >, >>] <filename>");
+      println!("Usage:\nwrite <filename> <\"text\">\n\nOR\n\nwrite <\"text\"> [Mode: >, >>] <filename>");
       return;
     }
 
