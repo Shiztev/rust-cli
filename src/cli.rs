@@ -113,6 +113,7 @@ pub mod commands {
   }
 
   /// Execute the command in the systems default cli
+  /// TODO: CURRENTLY DOESN'T WORK FOR MOST COMMANDS
   fn exec_bash_cmd(cmd: &str, args: &str) {
     let mut c: Command = Command::new(cmd);
     let a = args.split_whitespace();
